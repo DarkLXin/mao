@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="ojbk"
+  id="myeclipse.1514441273192"
+  context-root="/ojbk"
+  j2ee-spec="1.4"
+  archive="ojbk.war">
+  <attributes>
+    <attribute name="webrootdir" value="webapps" />
+  </attributes>
+</project-module>
+

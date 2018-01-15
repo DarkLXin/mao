@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filesys-config>
+   <sys-config>   	 
+   	
+   	 <fileManager moduleName="default">
+          <!--  -->
+            <agent>localsaveAgent</agent>
+           	<!-- 
+           	文件存储的方式
+             0:放在应用下面
+			 1:放在webapps下面
+			 2:放在配置的rootDir下面
+			-->
+            <saveFileMode>1</saveFileMode>
+            <fileSystem-config>   
+            <!-- 
+              id:唯一标识
+              ip:对向映射的ip
+              portal:对向映射的端口
+              application:提供文件访问的应用名称
+              rootDir:应用下的存储目录
+              
+             -->
+             <system-node>       
+                   <fileSystem id="qr-NFS-01" protocol="http://"  ip="127.0.0.1" port="8080" application="content_file" rootDir="file" desc="" />  
+             </system-node>   
+             <system-node>  
+                   <fileSystem id="qr-NFS-02" protocol="http://"  ip="127.0.0.1" port="8080" application="content_file" rootDir="file" desc="" />  
+             </system-node>  
+            
+            </fileSystem-config>
+         </fileManager>  
+   	
+    </sys-config>     
+   
+</filesys-config>

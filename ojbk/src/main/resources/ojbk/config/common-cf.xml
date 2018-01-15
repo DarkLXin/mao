@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ca-config>
+	<config>
+		<!-- 需要进行初始化的系统上下文类,这些类都实现了CFContext接口 -->
+		<initContextClass>
+			<!-- 文件上传异步解析处理 -->
+			<!--<ClassName id="AsyncFileHandle" desc="file">com.iboss.core.task.AsyncFileHandle</ClassName>-->			
+		</initContextClass>
+
+
+
+	</config>
+
+
+
+</ca-config>
+
+	
+	
+	

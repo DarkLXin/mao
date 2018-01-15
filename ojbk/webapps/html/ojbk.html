@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>maoOJBK</title>
+
+    <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+ <style>
+    	.ibox-title {
+    		height: 57px;
+    	}
+</style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                       <button type="button" class="btn btn-success" onclick="add();"><i class="fa fa-plus"></i>&nbsp;&nbsp;添加</button>
+                       <button type="button" class="btn btn-primary" onclick="edit();"><i class="fa fa-copy"></i>&nbsp;&nbsp;编辑</button>
+                       <button type="button" class="btn btn-danger" onclick="del();"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除</button>
+                       
+                       <button type="button" class="btn btn-primary pull-right search-btn" onclick="form_reset();"><i class="fa fa-remove"></i>&nbsp;&nbsp;重置</button>
+                       <button type="button" class="btn btn-primary pull-right search-btn" onclick="search();"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</button>
+                       <input type="text" id="price" placeholder="价格" class="form-control pull-right search-input search">
+                       <input type="text" id="name" placeholder="名称" class="form-control pull-right search-input search">
+                </div>
+                <div class="ibox-content">
+                    <div class="jqGrid_wrapper">
+                        <table id="table_list"></table>
+                        <div id="pager_list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+<script src="js/plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="js/plugins/peity/jquery.peity.min.js"></script>
+<script src="js/plugins/jqgrid/i18n/grid.locale-cn.js"></script>
+<script src="js/plugins/jqgrid/jquery.jqGrid.src.js"></script>
+<script src="js/plugins/layer/layer.js"></script>
+<script src="js/content.min.js?v=1.0.0"></script>
+<script src="js/common-iframe.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/common.js"></script>
+<script src="ojbk.js"></script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resetful-config>
+
+<!-- 
+  isNeed:表示是否需要进行拦截
+  id:resetful接口的类名+访问地址
+  name:接口的名称
+  
+   callStatistics :接口调用统计
+   paramValidate  :参数校验
+   auth           :鉴权
+   
+   interceptor下面的接口具有先后顺序,在前则先执行
+
+ -->    
+ 
+ <!--    UserRest 相关配置 start            -->
+    
+     <interceptor isNeed="y" id="UserRest.user-query" name="用户信息查询">
+        <callStatistics  isNeed="y" ></callStatistics>
+        <paramValidate   isNeed="y"  >
+              <property isNeed="y"  name="userID" regular="[0-9]{1,11}" maxLength="11"  errorAlt=",用户ID最大值为11位的数字"  desc="用户ID" />
+              <property isNeed="n"  name="optUserID" regular="[0-9]{1,11}" maxLength="11"  errorAlt=",optUserID最大值为11位的数字"  desc="查询的用户ID" />
+        </paramValidate>
+	    <auth  isNeed="n">
+	        <authAgent>authTokent</authAgent>
+	    </auth>
+    </interceptor>   
+    
+     <interceptor isNeed="y" id="UserRest.user-verify" name="用户帐号验证">
+        <callStatistics  isNeed="y" ></callStatistics>
+        <paramValidate   isNeed="y"  >
+              <property isNeed="n"  name="phone" regular="\d{11}$" maxLength="11"  errorAlt=",电话号码为11位的数字"  desc="手机号码" />
+              <property isNeed="n"  name="account" regular="^.{1,11}" maxLength="11"  errorAlt=",帐号最大值为11位的字母"  desc="帐号" />
+        </paramValidate>
+	    <auth  isNeed="n" />	  
+    </interceptor> 
+    
+    <interceptor isNeed="y" id="UserRest.user-getSmsCode" name="手机号码验证码获取">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="phone" regular="\d{11}$" maxLength="11"  errorAlt=",电话号码为11位的数字"  desc="手机号码" />
+      </paramValidate>
+      <auth  isNeed="n" />
+    </interceptor> 
+    
+    <interceptor isNeed="y" id="UserRest.user-register" name="罗聊用户注册">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="phoneNum" regular="\d{11}$" maxLength="11"  errorAlt=",电话号码为11位的数字"  desc="手机号码" />
+         <property isNeed="y"  name="phoneVaildCode" regular="\d{4,6}" maxLength="6"  errorAlt=",验证码最大值为4-6位的数字"  desc="验证码" />
+         <property isNeed="y"  name="passWord" regular="^.{1,64}" maxLength="64"  errorAlt=",密码最大值为64位"  desc="密码" />
+         <property isNeed="y"  name="imsiNum" regular="^.{1,32}" maxLength="32"  errorAlt=",IMSI号最大值为32位"  desc="IMSI" />
+       </paramValidate>
+      <auth  isNeed="n" />
+    </interceptor> 
+    
+    
+    <interceptor isNeed="y" id="UserRest.user-logion" name="罗聊用户登录">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="account" regular="^.{1,11}" maxLength="11"  errorAlt=",为手机号码或帐号"  desc="帐号" />
+         <property isNeed="y"  name="passWord" regular="^.{1,64}" maxLength="64"  errorAlt=",密码最大值为64位"  desc="密码" />
+      </paramValidate>
+      <auth  isNeed="n" />
+    </interceptor> 
+    
+    
+    <interceptor isNeed="y" id="UserRest.user-mdpassword" name="罗聊用户帐号密码修改">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+         <property isNeed="y"  name="oldPassword" regular="^.{1,10}" maxLength="10"  errorAlt=",密码最大值为10位"  desc="密码" />
+         <property isNeed="y"  name="password" regular="^.{1,10}" maxLength="10"  errorAlt=",密码最大值为10位"  desc="密码" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor> 
+    
+   <interceptor isNeed="y" id="UserRest.user-resetpassword" name="罗聊用户帐号密码重置">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="account" regular="^.{1,11}" maxLength="11"  errorAlt=",为手机号码或帐号"  desc="帐号" />
+         <property isNeed="y"  name="smsCode" regular="\d{4,6}" maxLength="6"  errorAlt=",验证码最大值为4-6位的数字"  desc="验证码" />
+         <property isNeed="y"  name="password" regular="^.{1,10}" maxLength="10"  errorAlt=",密码最大值为10位"  desc="密码" />
+      </paramValidate>
+      <auth  isNeed="n"/>
+    </interceptor>
+    
+     <interceptor isNeed="y" id="UserRest.user-setuserinfo" name="罗聊用户资料设置">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+         <property isNeed="n"  name="userInfo.sex" regular="\d{1,11}" maxLength="1"  errorAlt=",性别为0或1的数字"  desc="性别" />
+         
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    <interceptor isNeed="y" id="UserRest.user-relation-query" name="电话本好友查询">
+      <callStatistics  isNeed="y" />
+      <paramValidate   isNeed="y"  >
+          <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="用户ID" />
+          <property isNeed="y"  name="phones" regular="^.{1,5000}" maxLength="5000"  errorAlt=",phones为11-500位的字符,多个用;分隔"  desc="多个电话号码" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    
+    <interceptor isNeed="y" id="UserRest.user-relation-opt" name="用户关系维护">
+      <callStatistics  isNeed="y" />
+      <paramValidate   isNeed="y"  >
+          <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="用户ID" />
+          <property isNeed="y"  name="efUserID" regular="\d{1,11}" maxLength="11"  errorAlt=",efUserID为1-11位的数字"  desc="被操作的用户ID" />
+          <property isNeed="n"  name="source" regular="[0|1|2|3]{1}" maxLength="1"  errorAlt=",source为1位的数字"  desc="好友来源," />
+          <property isNeed="n"  name="opt" regular="[0|1|2|3]{1}" maxLength="1"  errorAlt=",操作类型为1位的数字"  desc="操作类型" />
+          <property isNeed="n"  name="affirm" regular="[0|1]{1}" maxLength="1"  errorAlt=",affirm为1位的数字"  desc="是否发消息" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+     <interceptor isNeed="y" id="UserRest.user-friend-query" name="我的好友">
+      <callStatistics  isNeed="y" />
+      <paramValidate   isNeed="y"  >
+          <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+     <interceptor isNeed="y" id="UserRest.user-matchquery" name="用户查找">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="n"  >
+     </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+     <interceptor isNeed="y" id="UserRest.user-query" name="用户资料查询">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+     </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    
+    <interceptor isNeed="y" id="UserRest.user-meet-queryDetails" name="邂逅用户列表">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+         <property isNeed="y"  name="page" regular="\d{1,11}" maxLength="11"  errorAlt=",page为1-11位的数字"  desc="第几页" />
+         <property isNeed="y"  name="row" regular="\d{1,11}" maxLength="11"  errorAlt=",row为1-11位的数字"  desc="一页显示多少条" />
+     </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+     <interceptor isNeed="y" id="UserRest.user-meet-queryDetails" name="邂逅详情查询">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+         <property isNeed="y"  name="meetUserID" regular="\d{1,11}" maxLength="11"  errorAlt=",meetUserID为1-11位的数字"  desc="相遇的用户ID" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    <interceptor isNeed="y" id="UserRest.user-getvoipaccount" name="获取在线的VOIP帐号">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",用户ID为1-11位的数字"  desc="帐号" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+   <!--    UserRest 相关配置 end            -->
+   
+   
+   <!--    Devicerest 相关配置 start            -->
+      
+     <interceptor isNeed="y" id="DeviceRest.device-register" name="罗聊设备注册">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="appKey" regular="^.{1,64}" maxLength="64"  errorAlt=",AppKey为1-64位的字符"  desc="AppKey" />
+         <property isNeed="y"  name="imsi" regular="^.{1,20}" maxLength="20"  errorAlt=",imsi号码为1-20位的字符"  desc="imsi" />
+         <property isNeed="n"  name="imei" regular="^.{1,20}" maxLength="20"  errorAlt=",imei号码为1-20位的字符"  desc="imei" />
+         <property isNeed="y"  name="deviceId" regular="^.{1,40}" maxLength="40"  errorAlt=",deviceId为1-40位的字符"  desc="deviceId" />
+         <property isNeed="y"  name="os" regular="[1|2|3]{1}" maxLength="1"  errorAlt=",os为枚举值1|2|"  desc="设备操作系统"/>
+      </paramValidate>
+      <auth  isNeed="n" />
+    </interceptor>
+    
+     <interceptor isNeed="y" id="DeviceRest.device-login" name="罗聊设备登录">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="terminalId" regular="\d{1,11}" maxLength="11"  errorAlt=",terminalId为1-11位的数字"  desc="终端ID" />
+         <property isNeed="y"  name="secretKey" regular="^.{1,32}" maxLength="32"  errorAlt=",secretKey为1-32位的字符"  desc="密钥" />
+         <property isNeed="n"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="y"  name="imsi" regular="^.{1,20}" maxLength="20"  errorAlt=",imsi号码为1-20位的字符"  desc="imsi" />
+      </paramValidate>
+      <auth  isNeed="n" />
+    </interceptor>
+    
+     <interceptor isNeed="y" id="DeviceRest.device-bind" name="罗聊设备重绑">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="y"  name="imsi" regular="^.{1,20}" maxLength="20"  errorAlt=",imsi号码为1-20位的字符"  desc="imsi" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    <interceptor isNeed="y" id="DeviceRest.device-setwifi" name="罗聊设备wifi密码设置">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="y"  name="SSID" regular="^.{1,32}" maxLength="32"  errorAlt=",SSID为1-32位的字符"  desc="网络SSID" />
+         <property isNeed="y"  name="password" regular="^.{1,11}" maxLength="1"  errorAlt=",password号码为1-11位的字符"  desc="密码" />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    <interceptor isNeed="y" id="DeviceRest.device-querywifi" name="罗聊设备wifi密码查询">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="n"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="n"  name="imsi" regular="^.{1,20}" maxLength="20"  errorAlt=",imsi号码为1-20位的字符"  desc="imsi" />
+         <property isNeed="y"  name="deviceType" regular="[0|1]{1}" maxLength="1"  errorAlt=",deviceType只能为0或1"  desc="终端类型 " />
+      </paramValidate>
+      <auth  isNeed="y">
+	        <authAgent params="token;deviceType">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+      
+   <!--    Devicerest 相关配置 end            -->
+   
+    <!--    UserRelationRest 相关配置 start            -->
+    <interceptor isNeed="y" id="UserRelationRest.user-friend-query" name="我的好友">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+      </paramValidate>
+       <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+     <interceptor isNeed="y" id="UserRelationRest.user-relation-query" name="电话本好友查询">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="y"  name="phones" regular="^.{1,5000}" maxLength="5000"  errorAlt=",phones为多个手机号码,多个用;分隔"  desc="手机号码" />
+      </paramValidate>
+       <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+    <interceptor isNeed="y" id="UserRelationRest.user-relation-opt" name="用户与用户关系维护">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="y"  name="efUserID" regular="\d{1,11}" maxLength="11"  errorAlt=",efUserID为1-11位的数字"  desc="被操作的用户" />
+         <property isNeed="n"  name="opt" regular="[0|1|2|3]{1}" maxLength="1"  errorAlt=",opt为0，1,2,3"  desc="操作的类型" />
+         <property isNeed="n"  name="source" regular="[0|1|2|3]{1}" maxLength="1"  errorAlt=",source为0，1,2,3"  desc="好友来源" />
+         <property isNeed="n"  name="msg" regular="^.{1,500}" maxLength="50"  errorAlt=",msg最大值为50个字符"  desc="消息内容" />
+         <property isNeed="n"  name="affirm" regular="[0|1]{1}" maxLength="1"  errorAlt=",affirm为0，1"  desc="确认添加为好友" />
+       </paramValidate>
+       <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>    
+    
+     <!--    UserRelationRest 相关配置 end            -->
+     
+      <!--    MeetRest 邂逅接口 相关配置 start            -->
+      
+    <interceptor isNeed="y" id="MeetRest.user-meet-query" name="邂逅用户列表">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="n"  name="startIndex" regular="\d{1,11}" maxLength="11"  errorAlt=",startIndex为1-11位的数字"  desc="开始索引" />
+         <property isNeed="y"  name="row" regular="\d{1,11}" maxLength="11"  errorAlt=",row为1-11位的数字"  desc="一页显示多少条" />
+       </paramValidate>
+       <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+    
+   <interceptor isNeed="y" id="MeetRest.user-meet-queryDetails" name="邂逅详情查询">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="y"  name="meetUserID" regular="\d{1,11}" maxLength="11"  errorAlt=",meetUserID为1-11位的数字"  desc="相遇的用户ID" />
+       </paramValidate>
+       <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+      
+   <!--    MeetRest 邂逅接口 相关配置 end            -->
+   
+    
+   <!--    MessageRest 邂逅接口 相关配置 start            -->
+   
+    <interceptor isNeed="y" id="MessageRest.message-query" name="消息查询">
+      <callStatistics  isNeed="y" ></callStatistics>
+      <paramValidate   isNeed="y"  >
+         <property isNeed="y"  name="userID" regular="\d{1,11}" maxLength="11"  errorAlt=",userID为1-11位的数字"  desc="用户ID" />
+         <property isNeed="n"  name="status" regular="[0|1]{1}" maxLength="1"  errorAlt=",status为0,1的数字"  desc="消息状态" />
+         <property isNeed="n"  name="type" regular="[0|1|2|3|4]{1}" maxLength="1"  errorAlt=",type为0,1,2,3,4的数字"  desc="消息类型" />
+         <property isNeed="n"  name="startIndex" regular="\d{1,11}" maxLength="11"  errorAlt=",startIndex为1-11位的数字"  desc="开始索引" />
+         <property isNeed="y"  name="row" regular="\d{1,11}" maxLength="11"  errorAlt=",row为1-11位的数字"  desc="显示多少条" />
+       </paramValidate>
+       <auth  isNeed="y">
+	        <authAgent params="token">authTokent</authAgent>
+	   </auth>
+    </interceptor>
+      
+     
+   <!--    MessageRest 邂逅接口 相关配置 end            -->
+    
+</resetful-config>

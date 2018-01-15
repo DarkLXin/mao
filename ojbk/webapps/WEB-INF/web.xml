@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <!-- 根目录下的系统名称 -->
+	<context-param>
+		<param-name>systemName</param-name>
+		<param-value>ojbk</param-value>
+	</context-param>
+ 		
+ 	<!-- 配置目录的名称 -->
+	<context-param>
+		<param-name>configFilePath</param-name>
+  		<param-value>config</param-value>
+ 	</context-param>
+ 		
+ 	<!-- 总配置文件的名称 -->
+ 	<context-param>
+		<param-name>configFileName</param-name>
+  		<param-value>system-config.xml</param-value>
+ 	</context-param>
+ 		
+ 	<!-- 日志文件 -->
+ 	<context-param>
+		<param-name>configLogPath</param-name>
+  		<param-value>config/log4j.xml</param-value>
+ 	</context-param>		
+ 	<context-param>
+		<param-name>delay</param-name>
+  		<param-value>3600</param-value>
+ 	</context-param>
+ 	
+    <!-- Spring 3.0 config Start  -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:ojbk/init/applicationContext*.xml
+		</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+	</listener>		
+			
+	<!-- 加载配置管理框架 Start -->
+  	<listener>
+		<listener-class>
+			com.ecar.commons.cmf.init.InitSystemListener
+		</listener-class>		
+	</listener>
+	<!-- 加载配置管理框架 End -->	
+	
+	<listener>
+		<listener-class>com.ecar.commons.cmf.init.AppContextListener</listener-class>
+	</listener>
+
+    <!-- Spring 3.0 config End  -->
+
+	<!-- Spring encoding filter config Start -->
+	<filter>
+		<filter-name>Spring character encoding filter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>Spring character encoding filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- Spring encoding filter config End --><!--
+	
+	 Apache Shiro 
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>	
+		
+	--><!--　URL重写filter,用于将访问静态资源http://localhost/foo.css -->
+	<!--　转为http://localhost/static/foo.css　Start-->
+	<!--  
+	<filter>
+		<filter-name>rewrite</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+		<init-param>
+ 			<param-name>confReloadCheckInterval</param-name>
+			<param-value>60</param-value>
+ 	    </init-param>
+ 		<init-param>
+			<param-name>logLevel</param-name>
+			<param-value>DEBUG</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>rewrite</filter-name>
+		<url-pattern>/*</url-pattern>
+    	<dispatcher>REQUEST</dispatcher>
+    	<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	-->
+	<!--　URL重写filter End -->
+	
+	<!--　浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http　delete方法　-->
+	<filter>
+		<filter-name>methodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>methodFilter</filter-name>
+		<servlet-name>springRest</servlet-name>
+	</filter-mapping>
+	<!--　浏览器不支持put,delete等method End　-->
+
+	
+	<!-- 加载通信框架 Start 	
+	<listener>
+		<listener-class>
+			com.ecar.commons.cf.common.init.InitSystemListener
+		</listener-class>
+	</listener>		
+	 加载通信框架 End 
+	
+	
+	
+	--><!--　Spring 处理 Rest 请求的配置 Start　-->	
+	<servlet>
+		<servlet-name>springRest</servlet-name>
+		<servlet-class>com.iboss.common.init.servelet.RestDispatcherServlet</servlet-class>
+		<init-param>  
+            <param-name>contextConfigLocation</param-name>  
+            <param-value>classpath*:ojbk/web/spring-servlet.xml</param-value>  
+        </init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springRest</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<!--　Spring 处理 Rest 请求的配置 End　--> 	
+
+		<!-- 配置 Druid 监控信息显示页面 -->  
+	<servlet>  
+	    <servlet-name>DruidStatView</servlet-name>  
+	    <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>  
+	    <init-param>  
+			<!-- 允许清空统计数据 -->  
+			<param-name>resetEnable</param-name>  
+			<param-value>true</param-value>  
+	    </init-param>  
+	    <init-param>  
+			<!-- 用户名 -->  
+			<param-name>loginUsername</param-name>  
+			<param-value>admin</param-value>  
+	    </init-param>  
+	    <init-param>  
+			<!-- 密码 -->  
+			<param-name>loginPassword</param-name>  
+			<param-value>admin</param-value>  
+	    </init-param>  
+	</servlet>  
+	
+	<!-- http://localhost:8090/SKXB/druid/index.html -->
+	<servlet-mapping>  
+	    <servlet-name>DruidStatView</servlet-name>  
+	    <url-pattern>/druid/*</url-pattern>  
+	</servlet-mapping>  
+
+
+  	<welcome-file-list>
+		<welcome-file>html/ojbk.html</welcome-file>
+	</welcome-file-list>
+	
+	
+	<context-param>  
+    	<param-name>spring.profiles.active</param-name>  
+    	<param-value>dev</param-value>  
+	</context-param>  
+	<context-param>  
+	    <param-name>spring.profiles.default</param-name>  
+	    <param-value>dev</param-value>  
+	</context-param>  
+	<context-param>  
+	    <param-name>spring.liveBeansView.mbeanDomain</param-name>  
+	    <param-value>dev</param-value>  
+	</context-param>
+	 
+</web-app>

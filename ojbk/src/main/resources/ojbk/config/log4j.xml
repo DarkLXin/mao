@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+     <!-- 控制台输出配置 -->
+     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <!-- 输出格式设置 -->
+      <layout class="org.apache.log4j.PatternLayout">
+          <!-- %d:时间 %t:线程 %p:级别 %c:类名 %m:信息 %n:换行 -->
+          <param name="ConversionPattern" value="%d [%t] %p : %c - %m%n" />
+       </layout>
+     </appender>
+
+    <!--global debug-->
+	<appender name="DEBUG" class="com.iboss.common.utils.Log4JFileAppender">
+		<param name="File" value="${catalina.base}/log/server/debug/debug.log"/>
+		<param name="MaxBackupIndex" value="300"/>
+		<param name="Encoding" value="UTF-8"/>
+		<param name="MaxFileSize" value="20MB"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ISO8601} %p [%c] - [%m]%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="debug"/>
+			<param name="LevelMax" value="debug"/>
+			<param name="acceptOnMatch" value="true"/>
+		</filter>
+	</appender>
+	    
+    <!--global info-->
+	<appender name="INFO" class="com.iboss.common.utils.Log4JFileAppender">
+		<param name="File" value="${catalina.base}/log/server/info/info.log"/>
+		<param name="MaxBackupIndex" value="300"/>
+		<param name="Encoding" value="UTF-8"/>
+		<param name="MaxFileSize" value="20MB"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ISO8601} %p [%c] - [%m]%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="info"/>
+			<param name="LevelMax" value="info"/>
+			<param name="acceptOnMatch" value="true"/>
+		</filter>
+	</appender>
+	    
+    <!--global error-->
+	<appender name="ERROR" class="com.iboss.common.utils.Log4JFileAppender">
+		<param name="File" value="${catalina.base}/log/server/error/error.log"/>
+		<param name="MaxBackupIndex" value="300"/>
+		<param name="Encoding" value="UTF-8"/>
+		<param name="MaxFileSize" value="20MB"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ISO8601} %p [%c] - [%m]%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="error"/>
+			<param name="LevelMax" value="error"/>
+			<param name="acceptOnMatch" value="true"/>
+		</filter>
+	</appender>  
+	
+
+	
+	<root>
+		<level value="INFO"/>
+		<!-- 输出到控制台,测试时可打开  -->
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="DEBUG"/>	
+		<appender-ref ref="INFO"/>
+		<appender-ref ref="ERROR"/>
+	</root>
+</log4j:configuration>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 初始化文件配置  读取tomcat/bin/ojbk/config/jdbc/下文件-->
+	<bean id="placeholderConfig" class="com.iboss.common.utils.SpringPropertis"
+		lazy-init="true">
+		<property name="locations">
+			<list>
+				<value>jdbc/jdbc.properties</value>	
+				<!--<value>jdbc/redis.properties</value>
+			--></list>
+		</property>
+	</bean>
+	
+	<!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+	<context:component-scan base-package="com.ojbk"><!-- base-package 如果多个，用“,”分隔 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<!-- MyBatis begin -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.ojbk"/>
+        <property name="typeAliasesSuperType" value="com.ojbk.base.BaseEntity"/>
+		<property name="configLocation" value="classpath:/ojbk/init/mybatis-config.xml"/>
+	</bean>
+	
+
+	
+	<!-- 扫描basePackage下所有以@Repository注解的接口 -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory" />
+        <property name="basePackage" value="com.ojbk"/>
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+    </bean>
+
+
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:defaultTimeout="3000">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" />
+			<tx:method name="updateImportRecord" propagation="REQUIRES_NEW" />
+		</tx:attributes>
+	</tx:advice>
+	
+
+
+
+	<!--
+		注意，必须确保包含<context:load-time-weaver
+		/>使@Transactional避免self-invocation导致事务失效
+	-->
+	<!--
+		order设置为200是为了确保自定义的AOP拦截器能先于此拦截器运行,aspectj模式确保了能支持self-invocation的事务
+	-->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+	<!--
+		使用annotation
+		自动注册bean(@Respository,@Component),并检查@Required,@Autowired的属性已被注入
+	-->
+	<context:component-scan annotation-config="true" base-package="com.iboss.common.*;com.ojbk.*" />
+
+	
+	<!-- 配置 JSR303 Bean Validator 定义 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+	<!-- 缓存配置 
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:/wechat/config/cache/ehcache.xml" />
+	</bean>
+	-->
+
+	<!-- Druid 连接池配置-->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="filters" value="${jdbc.filters}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+		<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}" />
+		<property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+		<property name="testOnReturn" value="${jdbc.testOnReturn}" />
+		<property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+		<property name="poolPreparedStatements" value="${jdbc.poolPreparedStatements}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${jdbc.maxPoolPreparedStatementPerConnectionSize}" />
+	</bean>
+	
+	  <!-- 配置RestTemplate开始 -->
+    <!--Http client Factory-->  
+    <bean id="httpClientFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+    	 <!--读取时间(毫秒)-->
+    	<property name="readTimeout" value="10000"/> 
+    	 <!--连接时间(毫秒)--> 
+    	<property name="connectTimeout" value="10000"/> 
+    </bean>  
+    
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">  
+        <constructor-arg ref="httpClientFactory"/>
+	    <property name="messageConverters">  
+	       <list>  
+	            <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+	                <property name="supportedMediaTypes" value="application/json;charset=UTF-8" />  
+	            </bean>  
+	        </list>  
+	    </property>  
+    </bean> 
+	<!-- 配置RestTemplate结束 -->
+	
+	
+
+	
+	 <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
+
+	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
+		scope="prototype">
+		<property name="patterns">
+			<list>
+				<value>com.ojbk.*.service.*</value>
+				<value>com.ojbk.*.dao.*</value>
+			</list>
+		</property>
+	</bean>
+	
+	<aop:config>
+		<aop:advisor advice-ref="druid-stat-interceptor"
+			pointcut-ref="druid-stat-pointcut" />
+	</aop:config>
+		
+	
+	
+	
+</beans>

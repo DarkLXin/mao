@@ -1,0 +1,57 @@
+<config>
+  <properties>
+       <property>  
+            <!-- 文件相对路径名称 -->  
+             <filepath>system.properties</filepath>
+            <!-- 
+                                  文件有修改时是否自动刷新 true 自动刷新
+             callBackClass 用于刷新文件后对您的业务绑定参数的初始化   ,配置为true时该值才有效 
+            -->
+             <isRefresh callBackClass="">true</isRefresh>
+            
+       </property>  
+       <property>  
+        
+            <!-- 
+                                  文件有修改时是否自动刷新 true 自动刷新
+             callBackClass 用于刷新文件后对您的业务绑定参数的初始化   ,配置为true时该值才有效 
+            -->
+             <isRefresh callBackClass="">true</isRefresh>
+            
+       </property>    
+       
+              
+         <property>  
+            <!-- 错误信息 -->  
+             <filepath>./service/error-code-en.properties</filepath>       
+              <isRefresh>false</isRefresh>       
+            
+       </property>   
+  </properties>  
+  
+  <xmls>
+  
+     <xml>
+         <filepath>common-cf.xml</filepath>
+         <isRefresh>false</isRefresh>       
+     </xml> 
+     
+       <xml>
+         <filepath>./service/service-config.xml</filepath>
+         <isRefresh>true</isRefresh>       
+      </xml> 
+     
+      <xml>
+         <filepath>./service/filesys-config.xml</filepath>
+         <isRefresh>false</isRefresh>       
+      </xml> 
+     
+  
+        
+  
+  </xmls>
+  
+    <!-- 监听执行间隔时间 毫秒 -->
+  <monitorTime>60000</monitorTime>
+  
+</config>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>     
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/ibatis-3-config.dtd">
+<configuration>
+
+	<settings>  
+        <setting name="logImpl" value="LOG4J"/>
+
+		<!-- 使用驼峰命名法转换字段。 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		
+		<!-- 设置本地缓存范围 session:就会有数据的共享  statement:语句范围 (这样就不会有数据的共享 ) defalut:session -->
+	    <setting name="localCacheScope" value="SESSION"/>
+	
+	    <!-- 设置但JDBC类型为空时,某些驱动程序 要指定值,default:OTHER，插入空值时不需要指定类型 -->
+	    <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings> 
+    
+    
+
+	<plugins>		
+		<plugin interceptor="com.github.pagehelper.PageHelper">
+			<property name="dialect" value="mysql" />
+		</plugin>
+	</plugins>
+
+	<!-- 实体接口映射资源 -->
+	<mappers>
+		<mapper resource="com/ojbk/mProduct/mappers/MProductDao.xml" />
+	</mappers>
+	
+
+</configuration> 
